@@ -251,12 +251,15 @@ for epoch in six.moves.range(50, 60):
         optimizer.update()
         
         # saving the reconstruction train loss and the total train loss
-        rec_loss_train[epoch] = loss_[0].data
-        loss_train[epoch] = loss_[1].data
+        rec_loss_train[epoch] += loss_[0].data
+        loss_train[epoch] += loss_[1].data
         
     # computing the reconstruction test loss and the total test loss
     loss_ = classifier(test_set._datasets[0])
     
+    # normalizing the train loss
+    rec_loss_train[epoch] = rec_loss_train[epoch] / DATA.idx
+    loss_train[epoch] = loss_train[epoch] / DATA.idx
     # saving the reconstruction test loss and the total test loss
     rec_loss_test[epoch] = loss_[0].data
     loss_test[epoch] = loss_[1].data
